@@ -29,3 +29,67 @@ cacheSolve <- function(x, ...) {
     x$setinverse(inv)
     inv
 }
+# I have taken an example in R and coded and find the results below.
+> makeCacheMatrix <- function(x = matrix()) {
++   m <- NULL
++   set <- function(y) {
++     x <<- y
++     m <<- NULL
++   }
++   get <- function() x
++   setinverse <- function(solve) m <<- solve
++   getinverse <- function() m
++   list(set = set, get = get,
++        setinverse = setinverse,
++        getinverse = getinverse)
++ }
+> cacheSolve <- function(x, ...) {
++   m <- x$getinverse()
++   if(!is.null(m)) {
++     message("getting cached data")
++     return(m)
++   }
++   data <- x$get()
++   m <- solve(data, ...)
++   x$setinverse(m)
++   m
++ }
+> a <- diag(5,3)
+> a
+     [,1] [,2] [,3]
+[1,]    5    0    0
+[2,]    0    5    0
+[3,]    0    0    5
+> CachedMarix <- makeCacheMatrix(a)
+> cacheSolve(CachedMarix)
+     [,1] [,2] [,3]
+[1,]  0.2  0.0  0.0
+[2,]  0.0  0.2  0.0
+[3,]  0.0  0.0  0.2
+> b <- diag(2,6)
+> b
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]    2    0    0    0    0    0
+[2,]    0    2    0    0    0    0
+[3,]    0    0    2    0    0    0
+[4,]    0    0    0    2    0    0
+[5,]    0    0    0    0    2    0
+[6,]    0    0    0    0    0    2
+> CachedMarix <- makeCacheMatrix(b)
+> cacheSolve(CachedMarix) 
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]  0.5  0.0  0.0  0.0  0.0  0.0
+[2,]  0.0  0.5  0.0  0.0  0.0  0.0
+[3,]  0.0  0.0  0.5  0.0  0.0  0.0
+[4,]  0.0  0.0  0.0  0.5  0.0  0.0
+[5,]  0.0  0.0  0.0  0.0  0.5  0.0
+[6,]  0.0  0.0  0.0  0.0  0.0  0.5
+> cacheSolve(CachedMarix)
+getting cached data
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]  0.5  0.0  0.0  0.0  0.0  0.0
+[2,]  0.0  0.5  0.0  0.0  0.0  0.0
+[3,]  0.0  0.0  0.5  0.0  0.0  0.0
+[4,]  0.0  0.0  0.0  0.5  0.0  0.0
+[5,]  0.0  0.0  0.0  0.0  0.5  0.0
+[6,]  0.0  0.0  0.0  0.0  0.0  0.5
