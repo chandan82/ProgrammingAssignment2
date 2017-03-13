@@ -41,5 +41,3 @@ cacheSolve <- function(x, ...) {
         x$setinv(m)
         m
 }
-Contact GitHub API Training Shop Blog About
-© 2017 GitHub, Inc. Terms Privacy Securi
